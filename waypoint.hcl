@@ -6,27 +6,16 @@ app "node-test" {
   }
 
   build {
-    use "kaniko" {
-      image = "node-test" # The name of the image to be built.
-      tag = "latest" # Tag for the Docker image.
-      context = "." # Build context
-      dockerfile = "Dockerfile"
+    use "docker" {
+      image = "node-test" # Name of the Docker image
+      tag = "latest" # Tag for the Docker image
 
       registry {
         use "aws_ecr" {
-          region = "eu-central-1" # AWS region where your ECR is located
-          repository = "waypoint-dp/node-test"
+          region = "eu-central-1" # AWS region
+          repository = "waypoint-dp/node-test" # Repository name in ECR
+          aws_account_id = "176791662223" # Your AWS account ID
         }
-      }
-
-      platform {
-        executor = "fargate"
-        profile  = "vicoland-non-prod" # Fargate profile name
-        labels = {
-          "use-vicoland-non-prod" = "true" # Label to ensure Fargate is used
-        }
-        memory   = "2GB"
-        cpu      = "1vCPU"
       }
     }
   }
@@ -41,9 +30,11 @@ app "node-test" {
         port = 3000
       }
 
+      image = "176791662223.dkr.ecr.eu-central-1.amazonaws.com/waypoint-dp/node-test:latest"
+
       ingress {
         host = "nodejs-demo.vicoland.io"  # Your specified domain
-        class = "traefik-nlb"  # Updated ingress class
+        class = "traefik-nlb"  # Ingress class for Traefik NLB
         annotations = {
           "kubernetes.io/ingress.class" = "traefik-nlb"
           "traefik.ingress.kubernetes.io/router.entrypoints" = "web"
