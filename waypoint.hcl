@@ -7,14 +7,12 @@ app "node-test" {
 
   build {
     use "docker" {
-      image = "node-test" # Name of the Docker image
-      tag = "latest" # Tag for the Docker image
-
+      # The Docker plugin automatically uses the project and app names for the image.
       registry {
         use "aws_ecr" {
-          region = "eu-central-1" # AWS region
-          repository = "waypoint-dp/node-test" # Repository name in ECR
-          aws_account_id = "176791662223" # Your AWS account ID
+          region = "eu-central-1"  # AWS region
+          repository = "waypoint-dp/node-test"  # ECR repository name
+          aws_account_id = "176791662223"  # Your AWS account ID
         }
       }
     }
